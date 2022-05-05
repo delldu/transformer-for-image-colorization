@@ -4,7 +4,7 @@ from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
 import torch.nn.functional as F
-
+import pdb
 
 class Identity(nn.Module):
     def forward(self, x):
@@ -213,12 +213,18 @@ class classify_network(nn.Module):
 class ColorNet(nn.Module):
     def __init__(self, input_nc, bias_input_nc, output_nc, norm_layer=nn.BatchNorm2d):
         super(ColorNet, self).__init__()
+        # input_nc = 1
+        # bias_input_nc = 198
+        # output_nc = 2
+        # norm_layer = functools.partial(<class 'torch.nn.modules.instancenorm.InstanceNorm2d'>, 
+        #     affine=False, track_running_stats=False)
+
         self.input_nc = input_nc
         self.output_nc = output_nc
         use_bias = True
 
-        model_head = [nn.Conv2d(input_nc, 32, kernel_size=3, stride=1, padding=1, bias=use_bias), nn.ReLU(True),
-                      norm_layer(32)]
+        model_head = [nn.Conv2d(input_nc, 32, kernel_size=3, stride=1, padding=1, bias=use_bias), 
+                nn.ReLU(True), norm_layer(32)]
 
         # Conv1
         model1=[nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1, bias=use_bias),]
@@ -391,6 +397,8 @@ class ColorNet(nn.Module):
 
 
     def forward(self, input, ref_input, ref_color, bias_input, ab_constant, device):
+        # input.size(), ref_input.size(), ref_color.size(), bias_input.size(), ab_constant.size()
+        # ([1, 1, 336, 256], [1, 1, 256, 256], [1, 2, 64, 64], [1, 198], [1, 198, 2])
 
         # align branch
         in_conv = self.model_head(input)

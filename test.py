@@ -30,6 +30,7 @@ if __name__ == '__main__':
         model.eval()
 
     for i, data in enumerate(dataset):
+        # data.keys() -- dict_keys(['A_l', 'A_ab', 'R_l', 'R_ab', 'ab', 'hist', 'A_paths'])
         model.set_input(data)
         model.test()
         visuals = model.get_current_visuals()
@@ -39,8 +40,6 @@ if __name__ == '__main__':
         print('processing (%04d)-th image... %s' % (i, img_path))
         # opt.aspect_ratio -- 1.0
         # opt.display_winsize -- 256
-
-        pdb.set_trace()
 
         save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize)
     webpage.save()
